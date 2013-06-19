@@ -41,10 +41,8 @@ class pgmdat:
 
 				if self.width < 0:
 					self.width = int(n)
-					print self.width
 				elif self.height < 0:
 					self.height = int(n)
-					print self.height
 				elif self.depth < 0:
 					self.depth = int(n)
 					headerflug = True
