@@ -1,4 +1,5 @@
 #coding:utf-8
+"""ノイズ除去"""
 import sys
 import numpy as np
 import cv2
