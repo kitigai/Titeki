@@ -36,8 +36,8 @@ for h in range(height):
 			fix[h][w] = 0
 			d = 0
 			f = 0
+			print h,w
 			while Ph != h or Pw != w or f == 0:
-				print Ph,Pw
 				if Ph > height-2 or Pw >width-2:
 					break
 					
@@ -50,16 +50,15 @@ for h in range(height):
 						f = 1
 					else:
 						d = 1
-				elif d == 1:
+				if d == 1:
 					if img[Ph+1][Pw] != 0:
 						fix[Ph+1][Pw] = 0
 						Ph = Ph+1
-						Pw = Pw
 						d = (d + 6)%8
 						f = 1
 					else:
 						d = 2		
-				elif d == 2:
+				if d == 2:
 					if img[Ph+1][Pw+1] != 0:
 						fix[Ph+1][Pw+1] = 0
 						Ph,Pw = Ph+1,Pw+1
@@ -68,7 +67,7 @@ for h in range(height):
 					else:
 						d = 3
 
-				elif d == 3:
+				if d == 3:
 					if img[Ph][Pw+1] != 0:
 						fix[Ph][Pw+1] = 0
 						Pw = Pw+1
@@ -76,7 +75,7 @@ for h in range(height):
 						f = 1
 					else:
 						d = 4
-				elif d == 4:
+				if d == 4:
 					if img[Ph-1][Pw+1] != 0:
 						fix[Ph-1][Pw+1] = 0
 						Ph,Pw = Ph-1,Pw+1
@@ -84,7 +83,7 @@ for h in range(height):
 						f = 1
 					else:
 						d = 5
-				elif d == 5:
+				if d == 5:
 					if img[Ph-1][Pw] != 0:
 						fix[Ph-1][Pw] = 0
 						Ph = Ph-1
@@ -92,7 +91,7 @@ for h in range(height):
 						f = 1
 					else:
 						d = 6
-				elif d == 6:
+				if d == 6:
 					if img[Ph-1][Pw-1] != 0:
 						fix[Ph-1][Pw-1] = 0
 						Ph,Pw = Ph-1,Pw-1
@@ -100,7 +99,7 @@ for h in range(height):
 						f = 1
 					else:
 						d = 7
-				elif d == 7:
+				if d == 7:
 					if img[Ph][Pw-1] != 0:
 						fix[Ph][Pw-1] = 0
 						Pw = Pw-1

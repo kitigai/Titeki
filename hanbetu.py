@@ -13,11 +13,11 @@ def hanbe(imagefilename):
 	width = pgm.width
 	height = pgm.height
 	N = width * height
-	print height, width
+	print height, width,pgm.depth
 
 	t = 0
 	fix = np.zeros([height,width])
-	histdata = [0] * 255
+	histdata = [0] * (pgm.depth+1)
 	T = 0
 	tes1 = 0
 
