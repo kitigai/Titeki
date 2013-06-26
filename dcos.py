@@ -18,6 +18,7 @@ def idct(X):
 		x[l] += X[0]/2
 		for k in range(1,N):
 			x[l] += X[k]*np.cos(np.pi*k*(2*l+1)/(2*N))
+		x[l] = int(x[l]+0.5)
 	return x
 
 if __name__ == "__main__":
@@ -45,23 +46,23 @@ if __name__ == "__main__":
 		for w in range(0,width,8):
 			pre = deepcopy(img[h:h+8,w:w+8])
 			for dh in range(8):
-				pre[dh][:] = dct(pre[dh])
-			pre = deepcopy(pre.T)
-			for dw in range(8):
-				pre[dw][:] = dct(pre[dw])
-			pre = deepcopy(pre.T)
+				pre[dh] = dct(pre[dh])
+			#pre = deepcopy(pre.T)
+			#for dw in range(8):
+			#	pre[dw][:] = dct(pre[dw])
+			#pre = deepcopy(pre.T)
 			fix[h:h+8,w:w+8] = deepcopy(pre)
 
 
 	for h in range(0,height,8):
 		for w in range(0,width,8):
-			pre = deepcopy(fix[h:h+8,w:w+8].T)
+			ipre = deepcopy(fix[h:h+8,w:w+8])
 			for dh in range(8):
-				pre[dh][:] = idct(pre[dh])
-			pre = deepcopy(pre.T)
-			for dw in range(8):
-				pre[dw][:] = idct(pre[dw])
-			ifix[h:h+8,w:w+8] = deepcopy(pre)
+				ipre[dh] = idct(ipre[dh])
+			#pre = deepcopy(pre.T)
+			#for dw in range(8):
+			#	pre[dw][:] = idct(pre[dw])
+			ifix[h:h+8,w:w+8] = deepcopy(ipre)
 		
 	plt.imshow(ifix)
 	plt.gray()

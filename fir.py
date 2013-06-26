@@ -2,7 +2,6 @@
 """ノイズ除去"""
 import sys
 import numpy as np
-import cv2
 from pylab import *
 from pypgm import pgmdat
 import matplotlib.pyplot as plt
