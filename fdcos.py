@@ -26,7 +26,7 @@ def dct2(f):
 				for n in range(N):
 					F[u][v] += f[m][n]*np.cos(np.pi*u*(2*m+1)/(2*M))*np.cos(np.pi*v*(2*n+1)/(2*N))
 				
-			F[u][v] = alp(u,N)*alp(v,N)*F[u][v]
+			F[u][v] = int(alp(u,N)*alp(v,N)*F[u][v]/10 + 0.5)*10
 
 
 	return F
@@ -48,7 +48,7 @@ def idct2(F):
 		for n in range(N):
 			for u in range(M):
 				for v in range(N):
-					f[m][n] += alp(u,N)*alp(v,N)*f[u][v]*np.cos(np.pi*u*(2*m+1)/(2*M))*np.cos(np.pi*v*(2*n+1)/(2*N))
+					f[m][n] += alp(u,N)*alp(v,N)*F[u][v]*np.cos(np.pi*u*(2*m+1)/(2*M))*np.cos(np.pi*v*(2*n+1)/(2*N))
 
 
 	return f
