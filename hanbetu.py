@@ -67,7 +67,10 @@ if __name__ == "__main__":
 	fix,img = hanbe(imagefilename)
 	print fix
 	print fix.shape
+	subplot(211)
 	plt.imshow(fix)
+	subplot(212)
+	hist(img.ravel(),100)
 	plt.gray()
 	plt.show()
 	#cv2.imshow("tes",img)
