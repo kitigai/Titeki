@@ -15,7 +15,7 @@ def hanbe(imagefilename):
 	print height, width,pgm.depth
 
 	t = 0
-	fix = np.zeros([height,width])
+	fix = np.zeros([height,width],dtype = int)
 	histdata = [0] * (pgm.depth+1)
 	T = 0
 	tes1 = 0
@@ -55,7 +55,7 @@ def hanbe(imagefilename):
 				fix[H][W] = 255
 
 
-	return fix
+	return fix,img
 
 if __name__ == "__main__":
 	argvs = sys.argv
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 		quit()
 
 	imagefilename = argvs[1]
-	fix = hanbe(imagefilename)
+	fix,img = hanbe(imagefilename)
 	print fix
 	print fix.shape
 	plt.imshow(fix)

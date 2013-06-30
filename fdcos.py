@@ -99,7 +99,18 @@ if __name__ == "__main__":
 			#for dw in range(8):
 			#	pre[dw][:] = idct(pre[dw])
 			#ifix[h:h+8,w:w+8] = deepcopy(ipre)
-		
+
+	
+	histdata = [0] * 257
+	aaa = range(257)
+	for x in range(height):
+		for y in range(width):
+			n = int(ifix[x][y])
+			histdata[n] += 1
+
+	subplot(211)
+	bar(aaa,histdata)
+	subplot(212)
 	plt.imshow(ifix)
 	plt.gray()
 	plt.show()	
