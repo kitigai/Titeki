@@ -17,6 +17,13 @@ img = pgm.img
 width = pgm.width
 height = pgm.height
 print height,width
+tatewaku = np.zeros(height)
+yokowaku = np.zeros(width+2)
+
+img = np.c_[tatewaku,img]
+img = np.c_[img,tatewaku]
+img = np.vstack((img,yokowaku))
+img = np.vstack((yokowaku,img))
 #niti = hanbetu.hanbe(imagefilename)
 """
 matrix =       [[6,5,4],
@@ -28,18 +35,25 @@ matrix =       [[6,5,4],
 #fix = np.identity(216)
 fix = np.zeros([height,width])
 print fix
-for h in range(height):
-	for w in range(1,width-1):
+for h in range(1,height):
+	for w in range(1,width):
 		if img[h][w] == 255 and img[h][w-1] == 0 and fix[h][w] != 255 :
 			Ph = h
 			Pw = w
 			fix[h][w] = 0
 			d = 0
 			f = 0
+			count = 0
+			flug = 0
+			cPh,cPw = -1,-1
 			print h,w
-			while Ph != h or Pw != w or f == 0:
-				if Ph > height-2 or Pw >width-2:
-					print "a"
+			while Ph != h or Pw != w or f == 0 :
+			#while Ph != cPh or Pw != cPw or flug != 1:
+				#if Ph == h and Pw == w and f == 1:
+				#	flug = 1
+					
+				if Ph > height-2 or Pw > width-2:
+					print "h"
 					break
 					
 				if d == 0:
@@ -49,6 +63,11 @@ for h in range(height):
 						Pw = Pw-1
 						d = (d + 6)%8
 						f = 1
+						count += 1
+						if count == 1:
+							print count
+							cPh = Ph
+							cPw = Pw
 					else:
 						d = 1
 				if d == 1:
@@ -57,6 +76,11 @@ for h in range(height):
 						Ph = Ph+1
 						d = (d + 6)%8
 						f = 1
+						count += 1
+						if count == 1:
+							print count
+							cPh = Ph
+							cPw = Pw
 					else:
 						d = 2		
 				if d == 2:
@@ -65,6 +89,11 @@ for h in range(height):
 						Ph,Pw = Ph+1,Pw+1
 						d = (d + 6)%8
 						f = 1
+						count += 1
+						if count == 1:
+							print count
+							cPh = Ph
+							cPw = Pw
 					else:
 						d = 3
 
@@ -74,6 +103,11 @@ for h in range(height):
 						Pw = Pw+1
 						d = (d + 6)%8
 						f = 1
+						count += 1
+						if count == 1:
+							print count
+							cPh = Ph
+							cPw = Pw
 					else:
 						d = 4
 				if d == 4:
@@ -82,6 +116,11 @@ for h in range(height):
 						Ph,Pw = Ph-1,Pw+1
 						d = (d + 6)%8
 						f = 1
+						count += 1
+						if count == 1:
+							print count
+							cPh = Ph
+							cPw = Pw
 					else:
 						d = 5
 				if d == 5:
@@ -90,6 +129,11 @@ for h in range(height):
 						Ph = Ph-1
 						d = (d + 6)%8
 						f = 1
+						count += 1
+						if count == 1:
+							print count
+							cPh = Ph
+							cPw = Pw
 					else:
 						d = 6
 				if d == 6:
@@ -98,6 +142,11 @@ for h in range(height):
 						Ph,Pw = Ph-1,Pw-1
 						d = (d + 6)%8
 						f = 1
+						count += 1
+						if count == 1:
+							print count
+							cPh = Ph
+							cPw = Pw
 					else:
 						d = 7
 				if d == 7:
@@ -106,6 +155,11 @@ for h in range(height):
 						Pw = Pw-1
 						d = (d + 6)%8
 						f = 1
+						count += 1
+						if count == 1:
+							print count
+							cPh = Ph
+							cPw = Pw
 					else:
 						d = 0
 plt.imshow(fix)
