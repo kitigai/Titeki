@@ -1,11 +1,16 @@
 #coding:utf-8
-"""判別分析"""
+"""[課題３]判別分析"""
 import sys
 import numpy as np
 from pylab import *
 from pypgm import pgmdat
 import matplotlib.pyplot as plt
+import cv2
 def hanbe(imagefilename):
+#判別分析法処理関数	
+#imagefilename	:処理画像ファイル名
+#返り値:二値化結果の二次元画素配列
+
 	pgm = pgmdat()
 	pgm.readimg(imagefilename)
 	img = pgm.img
@@ -19,7 +24,7 @@ def hanbe(imagefilename):
 	histdata = [0] * (pgm.depth+1)
 	T = 0
 	tes1 = 0
-
+	#ヒストグラム作成
 	for x in range(height):
 		for y in range(width):
 			n = img[x][y]
@@ -33,6 +38,7 @@ def hanbe(imagefilename):
 
 	Ramda = 0
 	ramda = 0
+	#クラス間分散ramdaを求めしきい値Tを最適化する
 	for t in range(255):
 		w = 0
 		u = 0
@@ -47,6 +53,7 @@ def hanbe(imagefilename):
 				
 			
 	print T
+	#求めたしきい値Tを使って二値化
 	for H in range(height):
 		for W in range(width):
 			if img[H][W] < T:
@@ -67,10 +74,8 @@ if __name__ == "__main__":
 	fix,img = hanbe(imagefilename)
 	print fix
 	print fix.shape
-	subplot(211)
+	cv2.imwrite("hanbetu.pgm",fix)
 	plt.imshow(fix)
-	subplot(212)
-	hist(img.ravel(),100)
 	plt.gray()
 	plt.show()
 	#cv2.imshow("tes",img)

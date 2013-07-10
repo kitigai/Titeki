@@ -1,4 +1,5 @@
 #coding:utf-8
+"""[課題4]輪郭線追跡"""
 import sys
 import numpy as np
 from pylab import *
@@ -19,7 +20,7 @@ height = pgm.height
 print height,width
 tatewaku = np.zeros(height)
 yokowaku = np.zeros(width+2)
-
+#前処理として元画像に黒枠をつける
 img = np.c_[tatewaku,img]
 img = np.c_[img,tatewaku]
 img = np.vstack((img,yokowaku))
@@ -29,30 +30,37 @@ img = np.vstack((yokowaku,img))
 matrix =       [[6,5,4],
 		[7,?,3],
 		[0,1,2]]
+
+探索は上記マトリクスの順番で行う
 """
 
 #fix = np.array([[255]*width]*height)
 #fix = np.identity(216)
 fix = np.zeros([height,width])
 print fix
-for h in range(1,height):
+#輪郭線追跡ループ
+for h in range(1,height):#探索開始点探索
 	for w in range(1,width):
-		if img[h][w] == 255 and img[h][w-1] == 0 and fix[h][w] != 255 :
+		if img[h][w] == 255 and img[h][w-1] == 0 : 
 			Ph = h
 			Pw = w
-			fix[h][w] = 0
+			fix[h][w] = 255
 			d = 0
 			f = 0
-			count = 0
-			flug = 0
-			cPh,cPw = -1,-1
+			count = 0#テスト用変数、いらない
+			flug = 0#テスト用変数、いらない
+			coun = 0
+			cPh,cPw = -1,-1#テスト用変数、いらない
 			print h,w
-			while Ph != h or Pw != w or f == 0 :
+			while Ph != h or Pw != w or f == 0 :#輪郭線追跡
+				coun += 1
+				if Ph == h and Pw == w and  coun == 18:#孤立点の処理
+					break
 			#while Ph != cPh or Pw != cPw or flug != 1:
 				#if Ph == h and Pw == w and f == 1:
 				#	flug = 1
 					
-				if Ph > height-2 or Pw > width-2:
+				if Ph > height-2 or Pw > width-2:#画像端処理
 					print "h"
 					break
 					

@@ -1,4 +1,5 @@
 #coding:utf-8
+"""[課題1]ティザ法による二値化処理"""
 import sys
 import numpy as np
 import cv2
@@ -18,7 +19,7 @@ pgm.readimg(imagefilename)
 img = pgm.img
 width = pgm.width
 height = pgm.height
-
+#ティザマトリクスの宣言
 if matrix == "1":
 	matrix1 = np.array([[0,128],
 		   [192,64]])
@@ -32,6 +33,7 @@ aa =  matrix1.shape
 matH,matW =  aa[0],aa[1]
 print matW,matH
 print width,height
+#ティザマトリクスをかける
 for i in range(0,height,matH):
 	for j in range(0,width,matW):
 		for H in range(matH):
@@ -40,6 +42,7 @@ for i in range(0,height,matH):
 					img[i + H][j + W] = 0
 				else:
 					img[i + H][j + W] = 255
+#処理画像表示
 plt.imshow(img)
 plt.gray()
 plt.show()

@@ -54,7 +54,7 @@ class pgmdat:
 
 		self.img = struct.unpack('B'*self.width*self.height,new)#バイナリを二次元数値配列に変換
 		self.img = numpy.array(self.img)
-		self.img = self.img.astype(numpy.uint8)
+		self.img = self.img.astype(numpy.int)
 		self.img = self.img.reshape(self.height,self.width)
 				
 	
