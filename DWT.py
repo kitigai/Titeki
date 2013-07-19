@@ -21,8 +21,17 @@ def upscale(c1,d1):
 def IDWT(c):
 	N,M = c.shape
 	for n  in range(N):
-		cn,dn = c[n][0:M/2],c[n][M/2:M]
+		cn = copy.deepcopy(c[n][0:M/2])
+		dn = copy.deepcopy(c[n][M/2:M])
+		c[n] = upscale(cn,dn)
+
+	c = c.T
+
+	for m in range(M):
+		
+
 	
+
 
 
 def downscale(c0):
