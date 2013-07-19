@@ -8,6 +8,23 @@ import copy
 import matplotlib.pyplot as plt
 
 
+def upscale(c1,d1):
+	N1,N2 = len(c1),len(d1)
+	N = N1+N2
+	c0 = np.zeros(N)
+	for n in range(N/2):
+		c0[2*n + 0] = c1[n]+d1[n]
+		c0[2*i + 1] = c1[n]-d1[n]
+
+	return c0
+
+def IDWT(c):
+	N,M = c.shape
+	for n  in range(N):
+		cn,dn = c[n][0:M/2],c[n][M/2:M]
+	
+
+
 def downscale(c0):
 	N = len(c0)
 	c1 = np.zeros(N/2)
