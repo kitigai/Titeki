@@ -5,17 +5,36 @@ import numpy as np
 from pylab import *
 from pypgm import pgmdat
 import matplotlib.pyplot as plt
-
-XMAX = 320
-YMAX = 240
+#XMAX = 320
+#YMAX = 240
 RMAX = 60
 THETA_MAX = 1024
-RHO_MAX
+#RHO_MAX = 400
+PIK = numpy.pi / THETA_MAX
 
-def Hough(img):
+def Hough(img,N,M):
+
+	RHO_MAX = int(np.sqrt(N**2 + M**2))
+	sn = []
+	cs = []
+	rho = 0
 	
+	for i in range(THETA_MAX):
+		sn.append(np.sin(PIK*i))
+		cs.append(np.cos(PIK*i))
 
 
+	counter = np.zeros([THETA_MAX,2*RHO_MAX])
+
+	for y in range(N):
+		for x in range(M):
+			if img[y][x] != 0:
+				for theta in range(THETA_MAX):
+					rho = int(x*cs[theta] + y*sn[theta] + 0.5)	
+					counter[theta][rho+RHO_MAX] += 1	
+			
+
+			
 
 if __name__ == "__main__":
 
