@@ -12,7 +12,7 @@ THETA_MAX = 1024
 #RHO_MAX = 400
 PIK = numpy.pi / THETA_MAX
 
-def Hough(img,N,M):
+def DHT(img,N,M):
 
 	RHO_MAX = int(np.sqrt(N**2 + M**2))
 	sn = []
@@ -32,6 +32,14 @@ def Hough(img,N,M):
 				for theta in range(THETA_MAX):
 					rho = int(x*cs[theta] + y*sn[theta] + 0.5)	
 					counter[theta][rho+RHO_MAX] += 1	
+
+	return counter
+
+def IHT(counter):
+	end_flag = 0
+	count = 0
+
+	while 
 			
 
 			
