@@ -7,10 +7,9 @@ from pypgm import pgmdat
 import matplotlib.pyplot as plt
 #XMAX = 320
 #YMAX = 240
-RMAX = 60
-THETA_MAX = 1024
+THETA_MAX = 128 
 #RHO_MAX = 400
-PIK = numpy.pi / THETA_MAX
+PIK = np.pi / THETA_MAX
 
 def DHT(img,N,M):
 
@@ -33,16 +32,30 @@ def DHT(img,N,M):
 					rho = int(x*cs[theta] + y*sn[theta] + 0.5)	
 					counter[theta][rho+RHO_MAX] += 1	
 
-	return counter
 
-def IHT(counter):
-	end_flag = 0
-	count = 0
 
-	while 
-			
+	sikiiti = 35	
+	fix = np.zeros([N,M])
+	ym,xm = 0,0
+	for theta_m in range(THETA_MAX):
+		for rho_m in range(-RHO_MAX,RHO_MAX):
+			if(counter[theta_m][rho_m+RHO_MAX] >= sikiiti):
 
-			
+
+				for xm in range(M):
+					#y = int(-(cs[theta]/sn[theta] * x  + rho/sn[theta]))
+					ym = uint8((rho_m - xm*cs[theta_m])/sn[theta_m])
+					if(ym < N and ym >= 0):
+						fix[y][x] = 255
+
+				for ym in range(N):
+					xm = int((rho_m - ym*sn[theta_m])/cs[theta_m])
+					if(xm < M and xm >= 0):
+						fix[ym][xm] = 255 
+
+
+	return counter,fix
+
 
 if __name__ == "__main__":
 
@@ -55,14 +68,17 @@ if __name__ == "__main__":
 	pgm = pgmdat()
 	pgm.readimg(imagefilename)
 	img = pgm.img
+	height = pgm.height
+	width = pgm.width
+	counter,fix = DHT(img,height,width)
 
-
-	fix,wave0 = d2wave(img,2)
-	print len(fix)
 
 	#fix = np.array([[255]*width]*height)
-	plt.imshow(fix[1])
+	subplot(121)
+	plt.imshow(img)
 	plt.gray()
+	subplot(122)
+	plt.imshow(fix)
 	plt.show()
 	#cv2.imshow("tes",img)
 	#cv2.waitKey(0)

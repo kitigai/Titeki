@@ -14,7 +14,7 @@ def upscale(c1,d1):
 	c0 = np.zeros(N)
 	for n in range(N/2):
 		c0[2*n + 0] = c1[n]+d1[n]
-		c0[2*i + 1] = c1[n]-d1[n]
+		c0[2*n + 1] = c1[n]-d1[n]
 
 	return c0
 
@@ -28,11 +28,19 @@ def IDWT(c):
 	c = c.T
 
 	for m in range(M):
-		
+		cn = copy.deepcopy(c[m][0:N/2])
+		dn = copy.deepcopy(c[m][N/2:N])
+		c[m] = upscale(cn,dn)
 
-	
+	c = c.T
+	return c
 
+def IDWTloop(c,Nsize,Msize):	
+	c1 = c[0:Nsize,0:Msize]
 
+	c1 = IDWT(c1)
+	c[0:Nsize,0:Msize] = c1
+	return c
 
 def downscale(c0):
 	N = len(c0)
@@ -63,9 +71,6 @@ def DWT(c):
 	c1 = c1.T
 	return c1
 	
-		
-			
-	
 def DWTloop(c, Nsize, Msize):
 	#c1 = np.zeros([Nsize,Msize])
 	c1 = c[0:Nsize,0:Msize]
@@ -75,10 +80,6 @@ def DWTloop(c, Nsize, Msize):
 
 	c[0:Nsize,0:Msize] = c1
 	return c
-
-	
-	
-	
 
 if __name__ == "__main__":
 
@@ -100,8 +101,26 @@ if __name__ == "__main__":
 		img = DWTloop(img,height,width)
 		height /= 2
 		width /= 2
+	fix = copy.deepcopy(img)
+
+	for i in range(height):
+		for j in range(width):
+			fix[i][j] = 0
+
+	height *= 2
+	width *= 2
+
+	for i in range(level):
+		fix = IDWTloop(fix,height,width)
+		height *= 2
+		width *= 2
+		
 	#fix = np.array([[255]*width]*height)
+	subplot(211)
 	plt.imshow(img)
+	plt.gray()
+	subplot(212)
+	plt.imshow(fix)
 	plt.gray()
 	plt.show()
 	#cv2.imshow("tes",img)
