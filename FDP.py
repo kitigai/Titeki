@@ -4,9 +4,10 @@ import sys
 import numpy as np
 from pylab import *
 from pypgm import pgmdat
+import singou as sg
 import matplotlib.pyplot as plt
 
-def findchaincode(img,height,width):
+def fcc(img,height,width):
 	fix = np.zeros([height,width])
 	chain = []
 	#輪郭線追跡ループ
@@ -22,7 +23,6 @@ def findchaincode(img,height,width):
 				flug = 0#テスト用変数、いらない
 				coun = 0
 				cPh,cPw = -1,-1#テスト用変数、いらない
-				print h,w
 				while Ph != h or Pw != w or f == 0 :#輪郭線追跡
 					coun += 1
 					if Ph == h and Pw == w and  coun == 18:#孤立点の処理
@@ -32,12 +32,11 @@ def findchaincode(img,height,width):
 					#	flug = 1
 						
 					if Ph > height-2 or Pw > width-2:#画像端処理
-						print "h"
 						break
 						
 					if d == 0:
 						if img[Ph+1][Pw-1] != 0:
-							chain.append(d)
+							chain.append(complex(1,-1))
 							fix[Ph+1][Pw-1] = 255
 							Ph = Ph+1
 							Pw = Pw-1
@@ -45,35 +44,32 @@ def findchaincode(img,height,width):
 							f = 1
 							count += 1
 							if count == 1:
-								print count
 								cPh = Ph
 								cPw = Pw
 						else:
 							d = 1
 					if d == 1:
 						if img[Ph+1][Pw] != 0:
-							chain.append(d)
+							chain.append(complex(1,0))
 							fix[Ph+1][Pw] = 255
 							Ph = Ph+1
 							d = (d + 6)%8
 							f = 1
 							count += 1
 							if count == 1:
-								print count
 								cPh = Ph
 								cPw = Pw
 						else:
 							d = 2		
 					if d == 2:
 						if img[Ph+1][Pw+1] != 0:
-							chain.append(d)
+							chain.append(complex(1,1))
 							fix[Ph+1][Pw+1] = 255
 							Ph,Pw = Ph+1,Pw+1
 							d = (d + 6)%8
 							f = 1
 							count += 1
 							if count == 1:
-								print count
 								cPh = Ph
 								cPw = Pw
 						else:
@@ -81,70 +77,65 @@ def findchaincode(img,height,width):
 
 					if d == 3:
 						if img[Ph][Pw+1] != 0:
-							chain.append(d)
+							chain.append(complex(0,1))
 							fix[Ph][Pw+1] = 255
 							Pw = Pw+1
 							d = (d + 6)%8
 							f = 1
 							count += 1
 							if count == 1:
-								print count
 								cPh = Ph
 								cPw = Pw
 						else:
 							d = 4
 					if d == 4:
 						if img[Ph-1][Pw+1] != 0:
-							chain.append(d)
+							chain.append(complex(-1,1))
 							fix[Ph-1][Pw+1] = 255
 							Ph,Pw = Ph-1,Pw+1
 							d = (d + 6)%8
 							f = 1
 							count += 1
 							if count == 1:
-								print count
 								cPh = Ph
 								cPw = Pw
 						else:
 							d = 5
 					if d == 5:
 						if img[Ph-1][Pw] != 0:
-							chain.append(d)
+							chain.append(complex(-1,0))
 							fix[Ph-1][Pw] = 255
 							Ph = Ph-1
 							d = (d + 6)%8
 							f = 1
 							count += 1
 							if count == 1:
-								print count
 								cPh = Ph
 								cPw = Pw
 						else:
 							d = 6
 					if d == 6:
 						if img[Ph-1][Pw-1] != 0:
-							chain.append(d)
+							chain.append(complex(-1,-1))
 							fix[Ph-1][Pw-1] = 255
 							Ph,Pw = Ph-1,Pw-1
 							d = (d + 6)%8
 							f = 1
 							count += 1
 							if count == 1:
-								print count
 								cPh = Ph
 								cPw = Pw
 						else:
 							d = 7
 					if d == 7:
 						if img[Ph][Pw-1] != 0:
-							chain.append(d)
+							chain.append(complex(0,-1))
 							fix[Ph][Pw-1] = 255
 							Pw = Pw-1
 							d = (d + 6)%8
 							f = 1
 							count += 1
 							if count == 1:
-								print count
 								cPh = Ph
 								cPw = Pw
 						else:
@@ -152,34 +143,59 @@ def findchaincode(img,height,width):
 
 				return chain,h,w
 
-argvs = sys.argv
-if (len(argvs) != 2):
-	print "miss"
-	quit()
+def ifcc(chain,h,w,height,width):
+	fix = np.zeros([height,width])
+	fix[h,w] = 255
+	for ch in chain:
+		fix[h+int(ch.real),w+int(ch.imag)] = 255
+		h = h+int(ch.real)
+		w = w+int(ch.imag)
 
-imagefilename = argvs[1]
-pgm = pgmdat()
-pgm.readimg(imagefilename)
-img = pgm.img
-width = pgm.width
-height = pgm.height
-tatewaku = np.zeros(height)
-yokowaku = np.zeros(width+2)
-#前処理として元画像に黒枠をつける
-img = np.c_[tatewaku,img]
-img = np.c_[img,tatewaku]
-img = np.vstack((img,yokowaku))
-img = np.vstack((yokowaku,img))
-#niti = hanbetu.hanbe(imagefilename)
-"""
-matrix =       [[6,5,4],
-		[7,?,3],
-		[0,1,2]]
+	return fix
+	
+if __name__ == "__main__":
 
-探索は上記マトリクスの順番で行う
-"""
-chain,h,w = findchaincode(img,height,width)
-print chain
-#plt.imshow(fix)
-#plt.gray()
-#plt.show()
+	argvs = sys.argv
+	if (len(argvs) != 3):
+		print "miss"
+		quit()
+
+	imagefilename = argvs[1]
+	k = int(argvs[2])
+	pgm = pgmdat()
+	pgm.readimg(imagefilename)
+	img = pgm.img
+	width = pgm.width
+	height = pgm.height
+	tatewaku = np.zeros(height)
+	yokowaku = np.zeros(width+2)
+	#前処理として元画像に黒枠をつける
+	img = np.c_[tatewaku,img]
+	img = np.c_[img,tatewaku]
+	img = np.vstack((img,yokowaku))
+	img = np.vstack((yokowaku,img))
+	#niti = hanbetu.hanbe(imagefilename)
+	"""
+	matrix =       [[6,5,4],
+			[7,?,3],
+			[0,1,2]]
+
+	探索は上記マトリクスの順番で行う
+	"""
+	chain,h,w = fcc(img,height,width)
+	chre = [i.real for i in chain]
+	chim = [i.imag for i in chain]
+	Chr = sg.dft(chre)
+	Chi = sg.dft(chim)
+	print len(Chr)
+	Chr[k:len(Chr)-k] = [0]*(len(Chr)-k*2)
+	Chi[k:len(Chi)-k] = [0]*(len(Chi)-k*2)
+	chreal = sg.ift(Chr)
+	chreal = [int(i.real + 0.5*i.real/np.fabs(i.real)) for i in chreal]
+	chimag = sg.ift(Chi)
+	chimag = [int(i.real + 0.5*i.real/np.fabs(i.real)) for i in chimag]
+	cha = [complex(chreal[i],chimag[i]) for i in range(len(chimag))]
+	fix = ifcc(cha,h,w,height,width)
+	plt.imshow(fix)
+	plt.gray()
+	plt.show()
