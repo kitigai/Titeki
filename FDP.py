@@ -1,6 +1,7 @@
 #coding:utf-8
 """[課題4]輪郭線追跡"""
 import sys
+import scipy
 import numpy as np
 from pylab import *
 from pypgm import pgmdat
@@ -156,7 +157,7 @@ def ifcc(chain,h,w,height,width):
 if __name__ == "__main__":
 
 	argvs = sys.argv
-	if (len(argvs) != 3):
+	if (len(argvs) != 4):
 		print "miss"
 		quit()
 
@@ -182,7 +183,24 @@ if __name__ == "__main__":
 
 	探索は上記マトリクスの順番で行う
 	"""
+	samplen = int(argvs[3])
+	chain2 = []
 	chain,h,w = fcc(img,height,width)
+	print h,w
+	for i in range(0,len(chain)-samplen,samplen):
+		for r in range(samplen):
+			jr = (chain[i+samplen].real-chain[i].real)/-samplen
+			ji = (chain[i+samplen].imag-chain[i].imag)/-samplen
+			chain2.append(complex(chain[i].real-r*jr,chain[i].imag - r*ji))
+
+	#Cha = sg.dft(chain2)
+	Cha = scipy.fft(chain2)
+	Cha[k+1:len(Cha)-k] = [0.0]*(len(Cha)-k*2-1)
+	#chreal = sg.ift(Cha)
+	chreal = scipy.ifft(Cha)
+	chreala = [complex(int(round(i.real)), int(round(i.imag))) for i in chreal]
+	chain3 = [complex(int(round(i.real)), int(round(i.imag))) for i in chain2]
+	"""
 	chre = [i.real for i in chain]
 	chim = [i.imag for i in chain]
 	Chr = sg.dft(chre)
@@ -195,7 +213,25 @@ if __name__ == "__main__":
 	chimag = sg.ift(Chi)
 	chimag = [int(i.real + 0.5*i.real/np.fabs(i.real)) for i in chimag]
 	cha = [complex(chreal[i],chimag[i]) for i in range(len(chimag))]
-	fix = ifcc(cha,h,w,height,width)
+	"""
+	fix = ifcc(chreala,h,w,height,width)
+	fix2 = ifcc(chain3,h,w,height,width)
+
+	chain = [ch.imag for ch in chain2]
+	chreal = [chre.imag for chre in chreal]	
+	chreala = [ch.imag for ch in chreala]
+	chain3 = [ch.imag for ch in chain3]
+
+	subplot(321)
 	plt.imshow(fix)
 	plt.gray()
+	subplot(322)
+	plt.imshow(fix2)
+	plt.gray()
+	subplot(312)
+	plot(chain)
+	plot(chreal)
+	plot(chreala)
+	subplot(313)
+	plot(chain3)
 	plt.show()
