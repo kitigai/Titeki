@@ -10,6 +10,19 @@ import numpy
 from pylab import *
 from pypgm import pgmdat
 
+class treenode:
+	
+	
+	def __init__(self,value,occurrence):
+		self.value = value
+		self.occurrence = occurrence
+
+	def __init__(self,occurrence,left,right):
+		self.occurrence = occurrence
+		self.left = left
+		self.right = right
+		self.value = int(nan)
+		
 
 def hist(img):
 	histdata = [0] * (img.depth)
@@ -20,21 +33,21 @@ def hist(img):
 
 	return histdata
 
-def 
-argvs = sys.argv
-if(len(argvs) !=2 ):
-	print 'miss'
-	quit()
+if __name__ == "__main__": 
+	argvs = sys.argv
+	if(len(argvs) !=2 ):
+		print 'miss'
+		quit()
 
-imagefilename = argvs[1]
-pgm = pgmdat()
-pgm.readimg(imagefilename)
+	imagefilename = argvs[1]
+	pgm = pgmdat()
+	pgm.readimg(imagefilename)
 
-width = pgm.width
-height = pgm.height
-depth = pgm.depth
+	width = pgm.width
+	height = pgm.height
+	depth = pgm.depth
 
-histdata = hist(pgm)
+	histdata = hist(pgm)
 
-show()
+	show()
 
