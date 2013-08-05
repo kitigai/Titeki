@@ -13,11 +13,12 @@ from pypgm import pgmdat
 class treenode:
 	
 	
-	def __init__(self,value = nan,occurrence = nan,left = nan,right = nan):
+	def __init__(self,value = nan,occurrence = nan,left = nan,right = nan,parents=nan):
 		self.value = value
 		self.occurrence = occurrence
 		self.left = left
 		self.right = right
+		self.parents = parents
 
 	
 def makeparents(left,right):
@@ -36,9 +37,17 @@ def madeleaf(hist):
 
 def maketree(leaf):
 	allocure = 0
+	i = 0
 	for le in leaf:
 		allocure += le.occurrence
 
+	while leaf[len(leaf)-1].occurrence < 8:	
+		leaf.append(makeparents(leaf[i],leaf[i+1]))
+		leaf[i].parents = leaf[len(leaf)-1]
+		leaf[i+1].parents = leaf[len(leaf)-1]
+		leaf = sorted(leaf,key = lambda treenode: treenode.occurrence)
+		i += 2
+		
 		
 
 def hist(img):
