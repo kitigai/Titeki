@@ -13,15 +13,32 @@ from pypgm import pgmdat
 class treenode:
 	
 	
-	def __init__(self,value,occurrence):
+	def __init__(self,value = nan,occurrence = nan,left = nan,right = nan):
 		self.value = value
-		self.occurrence = occurrence
-
-	def __init__(self,occurrence,left,right):
 		self.occurrence = occurrence
 		self.left = left
 		self.right = right
-		self.value = int(nan)
+
+	
+def makeparents(left,right):
+	occurrence = left.occurrence + right.occurrence
+	parents = treenode(occurrence = occurrence,left = left,right = right)
+	return parents
+
+def madeleaf(hist):
+	leaf = []	
+	for h in range(len(hist)):
+		leaf.append(treenode(h,hist[h]))
+
+	leaf = sorted(leaf,key = lambda treenode: treenode.occurrence)
+
+	return leaf
+
+def maketree(leaf):
+	allocure = 0
+	for le in leaf:
+		allocure += le.occurrence
+
 		
 
 def hist(img):
@@ -42,6 +59,7 @@ if __name__ == "__main__":
 	imagefilename = argvs[1]
 	pgm = pgmdat()
 	pgm.readimg(imagefilename)
+
 
 	width = pgm.width
 	height = pgm.height
