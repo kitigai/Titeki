@@ -55,6 +55,9 @@ def maketree(leaf):
 		leaf = sorted(leaf,key = lambda treenode: treenode.occurrence)
 		i += 2
 
+	for i in range(len(leaf)):
+		leaf[i].occurrence = None
+
 	return leaf
 
 def calkcode(leaf,value):
@@ -98,13 +101,13 @@ def savetree(tree,pgm,filename):
 	data = data+ '0'*(8-len(data)%8)
 	length=len(data)/8
 	print length,len(data)%8
-	packed_value = pack('B'*length,int(data,2))
+	packed_value = ""
+	le = 8
+	for aaa in range(length):
+		packed_value += pack('B',int(data[aaa*le:(aaa+1)*le],2))
 	f.write(packed_value)
 	f.close()
 		
-
-	
-	
 
 if __name__ == "__main__": 
 	argvs = sys.argv
